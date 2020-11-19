@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  terraform:
+    image: "1mill/terraform-sops:alpine-2020-09-05T04-00-37"
+    environment:
+      - APPLICATION_NAME=EKS-app
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+      - TF_VAR_AWS_REGION=$AWS_REGION
+    volumes:
+      - ./:/app
+    command:
+      sh -c "terraform init && terraform plan"
