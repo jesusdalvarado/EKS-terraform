@@ -33,6 +33,7 @@ This is an example app built using Terraform to create the infrstructure resourc
 
 <h2>Terraform useful commands to create resources</h2>
 
-1. Run terraform init
-2. Run terraform plan
-3. Run terraform apply
+1. `docker-compose run terraform sh`
+1. Run `terraform init`
+2. Run `terraform plan`
+3. Run `terraform apply`
