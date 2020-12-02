@@ -126,7 +126,7 @@ resource "aws_subnet" "example1" {
   availability_zone = "us-west-2a"
 
   tags = {
-    Name = "Example1"
+    "kubernetes.io/cluster/eks_cluster_example" = "shared"
   }
 }
 
@@ -136,7 +136,7 @@ resource "aws_subnet" "example2" {
   availability_zone = "us-west-2b"
 
   tags = {
-    Name = "Example2"
+    "kubernetes.io/cluster/eks_cluster_example" = "shared"
   }
 }
 
