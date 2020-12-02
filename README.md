@@ -9,6 +9,7 @@ This is an example app built using Terraform to create the infrstructure resourc
 
 - Terraform
 - Amazon EKS
+- Rancher
 - Docker
 - Amazon S3
 - Amazon VPC (required by EKS)
