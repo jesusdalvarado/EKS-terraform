@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "default" {
 		actions = ["sts:AssumeRole"]
 		effect = "Allow"
 		principals {
-			identifiers = ["ec2.amazonaws.com"]
+			identifiers = ["ec2.amazonaws.com", "eks.amazonaws.com"]
 			type = "Service"
 		}
 	}
