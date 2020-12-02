@@ -23,25 +23,20 @@ resource "aws_iam_instance_profile" "eks_test_profile" {
   name = "eks_test_profile"
   role = aws_iam_role.role.name
 }
+data "aws_iam_policy_document" "default" {
+	version = "2012-10-17"
+	statement {
+		actions = ["sts:AssumeRole"]
+		effect = "Allow"
+		principals {
+			identifiers = ["ec2.amazonaws.com"]
+			type = "Service"
+		}
+	}
+}
 
 resource "aws_iam_role" "role" {
-  name = "eks_test_role"
-  path = "/"
-
-  assume_role_policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "sts:AssumeRole",
-            "Principal": {
-               "Service": "ec2.amazonaws.com"
-            },
-            "Effect": "Allow"
-        }
-    ]
-}
-EOF
+	assume_role_policy = data.aws_iam_policy_document.default.json
 }
 
 resource "aws_iam_role_policy_attachment" "test-attach" {
