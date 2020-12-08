@@ -118,7 +118,9 @@ resource "aws_iam_role_policy_attachment" "example-amazon-eks-vpc-resource-contr
 # }
 
 resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block            = "10.0.0.0/16"
+  enable_dns_support    = true
+  enable_dns_hostnames  = true
 
   tags = {
     Name = "main"
