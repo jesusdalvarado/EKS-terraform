@@ -131,8 +131,10 @@ resource "aws_subnet" "example1" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.1.0/24"
   availability_zone = "us-west-2a"
+  map_public_ip_on_launch = true
 
   tags = {
+    # "kubernetes.io/cluster/${var.cluster_name}" = "shared"
     "kubernetes.io/cluster/eks_cluster_example" = "shared"
   }
 }
@@ -153,6 +155,7 @@ resource "aws_eks_cluster" "eks_cluster_example" {
 
   vpc_config {
     subnet_ids = [aws_subnet.example1.id, aws_subnet.example2.id]
+    # endpoint_private_access = true
   }
 
   # Ensure that IAM Role permissions are created before and deleted after EKS Cluster handling.
