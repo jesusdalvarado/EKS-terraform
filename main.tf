@@ -174,11 +174,41 @@ output "kubeconfig-certificate-authority-data" {
   value = aws_eks_cluster.eks_cluster_example
 }
 
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.main.id
+}
+
+resource "aws_route_table" "r_table" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw.id
+  }
+
+  tags = {
+    Name = "main"
+  }
+}
+
+resource "aws_route_table_association" "a" {
+  subnet_id      = aws_subnet.example1.id
+  route_table_id = aws_route_table.r_table.id
+}
+
+# resource "aws_key_pair" "deployer" {
+#   key_name   = "deployer-key"
+#   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQz1x2cEikKDEY0aIj41qgxMCP/iteneqXSIFZBp5vizPvaoIR3Um9xK7PGoW8giupGn+EPuxIA4cDM4vzOqOkiMPhz5XK0whEjkVzTo4+S0puvDZuwIsdiW9mxhJc7tgBNL0cYlWSYVkz4G/fslNfRPW5mYAM49f4fhtxPb5ok4Q2Lg9dPKVHO/Bgeu5woMc7RY0p1ej6D4CKFE6lymSDJpW0YHX/wqE9+cfEauh7xZcG0q9t2ta6F6fmX0agvpFyZo8aFbXeUBr7osSCJNgvavWbM/06niWrOvYX2xwWdhXmXSrbX8ZbabVohBK41 email@example.com"
+# }
+
 resource "aws_eks_node_group" "example_node" {
   cluster_name    = aws_eks_cluster.eks_cluster_example.name
   node_group_name = "example_node1"
   node_role_arn   = aws_iam_role.role.arn
   subnet_ids      = [aws_subnet.example1.id, aws_subnet.example2.id]
+  # remote_access {
+  #   ec2_ssh_key = aws_key_pair.deployer.id
+  # }
 
   scaling_config {
     desired_size  = 1
@@ -190,5 +220,6 @@ resource "aws_eks_node_group" "example_node" {
     aws_iam_role_policy_attachment.eks-worker-node-policy,
     aws_iam_role_policy_attachment.eks-cni-policy,
     aws_iam_role_policy_attachment.eks-container-registry-readonly-policy,
+    aws_internet_gateway.gw,
   ]
 }
