@@ -36,6 +36,7 @@ data "aws_iam_policy_document" "default" {
 }
 
 resource "aws_iam_role" "role" {
+  name  = "eks_test_role_terraform"
 	assume_role_policy = data.aws_iam_policy_document.default.json
 }
 
