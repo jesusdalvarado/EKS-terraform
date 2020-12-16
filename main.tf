@@ -211,8 +211,8 @@ resource "aws_eks_node_group" "example_node" {
   # }
 
   scaling_config {
-    desired_size  = 1
-    max_size      = 1
+    desired_size  = 2
+    max_size      = 2
     min_size      = 1
   }
 
@@ -222,4 +222,59 @@ resource "aws_eks_node_group" "example_node" {
     aws_iam_role_policy_attachment.eks-container-registry-readonly-policy,
     aws_internet_gateway.gw,
   ]
+}
+
+resource "kubernetes_deployment" "example" {
+  metadata {
+    name = "terraform-webserver-example"
+    labels = {
+      test = "MyExampleApp"
+    }
+  }
+
+  spec {
+    replicas = 3
+
+    selector {
+      match_labels = {
+        app = "HelloApp"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app = "HelloApp"
+        }
+      }
+
+      spec {
+        container {
+          image = "ghcr.io/jesusdalvarado/simple-hello-world:latest"
+          name  = "example"
+          port {
+            container_port = 5000
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_service" "webserver" {
+  metadata {
+    name = "hello-webserver-example"
+  }
+  spec {
+    selector = {
+      app = kubernetes_deployment.example.spec.0.template.0.metadata.0.labels.app
+    }
+
+    port {
+      port        = 5000
+      target_port = 5000
+    }
+
+    type = "LoadBalancer"
+  }
 }
