@@ -11,3 +11,9 @@ services:
       - ./:/app
     command:
       sh -c "terraform init && terraform plan"
+  web:
+    image: ghcr.io/jesusdalvarado/simple-hello-world:latest
+    ports:
+      - "5000:5000"
+    # command:
+    #   sh -c "flask run"
