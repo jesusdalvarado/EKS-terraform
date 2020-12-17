@@ -196,23 +196,27 @@ resource "aws_route_table_association" "a" {
   route_table_id = aws_route_table.r_table.id
 }
 
-# resource "aws_key_pair" "deployer" {
-#   key_name   = "deployer-key"
-#   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQz1x2cEikKDEY0aIj41qgxMCP/iteneqXSIFZBp5vizPvaoIR3Um9xK7PGoW8giupGn+EPuxIA4cDM4vzOqOkiMPhz5XK0whEjkVzTo4+S0puvDZuwIsdiW9mxhJc7tgBNL0cYlWSYVkz4G/fslNfRPW5mYAM49f4fhtxPb5ok4Q2Lg9dPKVHO/Bgeu5woMc7RY0p1ej6D4CKFE6lymSDJpW0YHX/wqE9+cfEauh7xZcG0q9t2ta6F6fmX0agvpFyZo8aFbXeUBr7osSCJNgvavWbM/06niWrOvYX2xwWdhXmXSrbX8ZbabVohBK41 email@example.com"
-# }
+resource "tls_private_key" "ssh" {
+  algorithm   = "RSA"
+  rsa_bits = "4096"
+}
+resource "aws_key_pair" "deployer" {
+  key_name   = "deployer-key"
+  public_key = tls_private_key.ssh.public_key_openssh
+}
 
 resource "aws_eks_node_group" "example_node" {
   cluster_name    = aws_eks_cluster.eks_cluster_example.name
   node_group_name = "example_node1"
   node_role_arn   = aws_iam_role.role.arn
   subnet_ids      = [aws_subnet.example1.id, aws_subnet.example2.id]
-  # remote_access {
-  #   ec2_ssh_key = aws_key_pair.deployer.id
-  # }
+  remote_access {
+    ec2_ssh_key = aws_key_pair.deployer.id
+  }
 
   scaling_config {
-    desired_size  = 2
-    max_size      = 2
+    desired_size  = 1
+    max_size      = 1
     min_size      = 1
   }
 
