@@ -45,6 +45,7 @@ This is an example app built using Terraform to create the infrstructure resourc
 <img src='assets/images/cluster diagram.png' width='1000px'>
 
 <h2>Requirements for the cluster</h2>
+
 - We need to create a VPC
 - We need 2 subnets, each of them in different availability zones (AZ)
 - Both subnets must be in the same VPC
