@@ -221,8 +221,8 @@ resource "aws_eks_node_group" "example_node" {
   }
 
   scaling_config {
-    desired_size  = 1
-    max_size      = 1
+    desired_size  = 2
+    max_size      = 2
     min_size      = 1
   }
 
@@ -271,7 +271,7 @@ resource "kubernetes_deployment" "example" {
   }
 }
 
-resource "kubernetes_service" "webserver" {
+resource "kubernetes_service" "webserver_load_balancer" { # Exposing ports to the internet
   metadata {
     name = "hello-webserver-example"
   }
@@ -281,8 +281,9 @@ resource "kubernetes_service" "webserver" {
     }
 
     port {
-      port        = 5000
-      target_port = 5000
+      target_port = 5000 # This is the port of the pod that will be exposed
+      port        = 8080 # Exposing the port to the internet on port 8000
+      node_port = 30000 # Exposing the port to the node/host (on all the nodes)
     }
 
     type = "LoadBalancer"
