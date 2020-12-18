@@ -38,3 +38,9 @@ This is an example app built using Terraform to create the infrstructure resourc
 1. Run `terraform init`
 2. Run `terraform plan`
 3. Run `terraform apply`
+
+
+
+<h2>Diagram of the cluster</h2>
+![alt text](https://github.com/jesusdalvarado/EKS-terraform/blob/main/assets/images/cluster%20diagram.png?raw=true)
+
