@@ -143,6 +143,7 @@ resource "aws_subnet" "example2" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.2.0/24"
   availability_zone = "us-west-2b"
+  map_public_ip_on_launch = true
 
   tags = {
     "kubernetes.io/cluster/eks_cluster_example" = "shared"
@@ -193,6 +194,11 @@ resource "aws_route_table" "r_table" {
 
 resource "aws_route_table_association" "a" {
   subnet_id      = aws_subnet.example1.id
+  route_table_id = aws_route_table.r_table.id
+}
+
+resource "aws_route_table_association" "b" {
+  subnet_id      = aws_subnet.example2.id
   route_table_id = aws_route_table.r_table.id
 }
 
