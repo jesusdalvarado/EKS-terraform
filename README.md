@@ -43,3 +43,22 @@ This is an example app built using Terraform to create the infrstructure resourc
 
 <h2>Diagram of the cluster</h2>
 <img src='assets/images/cluster diagram.png' width='1000px'>
+
+<h2>Requirements for the cluster</h2>
+- We need to create a VPC
+- We need 2 subnets, each of them in different availability zones (AZ)
+- Both subnets must be in the same VPC
+- Both subnets must have outbound traffic enabled
+- We need to configure aws client and kubectl locally
+
+<h2>References</h2>
+
+1. Provision an EKS cluster (install/configure AWS CLI and kubectl) https://learn.hashicorp.com/tutorials/terraform/eks
+2. Exposing an External IP Address to Access an Application in a Cluster (creating kubernetes_service (load balancer) and exposing webserver ports to the internet) https://kubernetes.io/docs/tutorials/stateless-application/expose-external-ip-address/
+3. Create kubernets_service using Terraform https://learn.hashicorp.com/tutorials/terraform/kubernetes-provider?in=terraform/kubernetes
+
+<h3>Notes</h3>
+
+1. Please note, when a cluster is created, a security group is created automatically for this cluster, so we don't need to create a security group.
+2. Every time we create a new cluster we need to run `aws eks --region 'us-west-2' update-kubeconfig --name 'eks_cluster_example'` to update kubeconfig
+3. If kubectl is not working properly, make sure you are in the right context by doing `kubectl config current-context`
