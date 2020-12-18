@@ -42,5 +42,4 @@ This is an example app built using Terraform to create the infrstructure resourc
 
 
 <h2>Diagram of the cluster</h2>
-![alt text](https://github.com/jesusdalvarado/EKS-terraform/blob/main/assets/images/cluster%20diagram.png?raw=true)
-
+<img src='assets/images/cluster diagram.png' width='1000px'>
