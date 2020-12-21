@@ -10,6 +10,9 @@ terraform {
     aws = {
       source = "hashicorp/aws"
     }
+    kubernetes = {
+      source = "hashicorp/kubernetes"
+    }
   }
 }
 
@@ -119,12 +122,27 @@ resource "aws_eks_cluster" "eks_cluster_example" {
   ]
 }
 
+output "cluster_info" {
+  value = aws_eks_cluster.eks_cluster_example
+}
 output "endpoint" {
   value = aws_eks_cluster.eks_cluster_example.endpoint
 }
 
 output "kubeconfig-certificate-authority-data" {
-  value = aws_eks_cluster.eks_cluster_example
+  value = aws_eks_cluster.eks_cluster_example.certificate_authority[0].data
+}
+
+data "aws_eks_cluster_auth" "example" {
+  name = "eks_cluster_example"
+}
+
+provider "kubernetes" {
+  load_config_file       = false # Do not use kubectl current's config context, use this cluster's config instead
+
+  host                   = aws_eks_cluster.eks_cluster_example.endpoint
+  cluster_ca_certificate = base64decode(aws_eks_cluster.eks_cluster_example.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.example.token
 }
 
 resource "aws_internet_gateway" "gw" {
