@@ -34,11 +34,6 @@ resource "kubernetes_deployment" "redis_deploy" {
     }
   }
 }
-
-output "redis_deployment" {
-  value = kubernetes_deployment.redis_deploy
-}
-
 resource "kubernetes_service" "redis_load_balancer" { # Exposing ports to the internet
   metadata {
     name = "redis-example"

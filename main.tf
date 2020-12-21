@@ -207,6 +207,7 @@ resource "aws_eks_node_group" "example_node" {
 module "my_flask_webserver" {
   source                                 = "./modules/webserver"
   docker_image                           = "ghcr.io/jesusdalvarado/simple-hello-world:latest"
+  redis_url = module.redis_db.redis_load_balancer.load_balancer_ingress.0.hostname
 
   depends_on = [ aws_eks_node_group.example_node ]
 }
@@ -216,4 +217,8 @@ module "redis_db" {
   docker_image = "ghcr.io/jesusdalvarado/redis-jesus:latest"
 
   depends_on = [ aws_eks_node_group.example_node ]
+}
+
+output "redis_url" {
+  value = module.redis_db.redis_load_balancer.load_balancer_ingress.0.hostname
 }

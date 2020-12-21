@@ -29,6 +29,10 @@ resource "kubernetes_deployment" "example" {
           port {
             container_port = 5000
           }
+          env {
+            name = "REDIS_URL"
+            value = var.redis_url
+          }
         }
       }
     }
