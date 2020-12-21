@@ -163,6 +163,29 @@ resource "aws_key_pair" "deployer" {
   public_key = tls_private_key.ssh.public_key_openssh
 }
 
+resource "aws_eks_node_group" "example_node" {
+  cluster_name    = aws_eks_cluster.eks_cluster_example.name
+  node_group_name = "example_node1"
+  node_role_arn   = aws_iam_role.role.arn
+  subnet_ids      = [aws_subnet.example1.id, aws_subnet.example2.id]
+  remote_access {
+    ec2_ssh_key = aws_key_pair.deployer.id
+  }
+
+  scaling_config {
+    desired_size  = 2
+    max_size      = 2
+    min_size      = 1
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.eks-worker-node-policy,
+    aws_iam_role_policy_attachment.eks-cni-policy,
+    aws_iam_role_policy_attachment.eks-container-registry-readonly-policy,
+    aws_internet_gateway.gw
+  ]
+}
+
 module "my_flask_webserver" {
   source                                 = "./modules/webserver"
   docker_image                           = "ghcr.io/jesusdalvarado/simple-hello-world:latest"
