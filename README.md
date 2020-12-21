@@ -43,6 +43,7 @@ This is an example app built using Terraform to create the infrstructure resourc
 
 <h2>Diagram of the cluster</h2>
 <img src='assets/images/cluster diagram.png' width='1000px'>
+<p>Note that currently independent nodes or node_ groups are not guaranteed, multiple pods can run in the same node</p>
 
 <h2>Requirements for the cluster</h2>
 
