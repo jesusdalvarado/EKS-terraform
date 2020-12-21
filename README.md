@@ -63,3 +63,8 @@ This is an example app built using Terraform to create the infrstructure resourc
 1. Please note, when a cluster is created, a security group is created automatically for this cluster, so we don't need to create a security group.
 2. Every time we create a new cluster we need to run `aws eks --region 'us-west-2' update-kubeconfig --name 'eks_cluster_example'` to update kubeconfig
 3. If kubectl is not working properly, make sure you are in the right context by doing `kubectl config current-context`
+
+<h2>How to test it</h2>
+
+1. After all the infrastructure is in place you can run the command `kubectl get services`, get the EXTERNAL-IP and the exported ports.
+2. Then you can do `curl a6e5638b08508416abdf4e0974ae1720-403006059.us-west-2.elb.amazonaws.com:8080`, you should see a message like "Hello World! I have been seen 1 times."
