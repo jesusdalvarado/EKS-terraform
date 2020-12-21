@@ -207,13 +207,13 @@ resource "aws_eks_node_group" "example_node" {
 module "my_flask_webserver" {
   source                                 = "./modules/webserver"
   docker_image                           = "ghcr.io/jesusdalvarado/simple-hello-world:latest"
-  cluster_name                           = aws_eks_cluster.eks_cluster_example.name
-  node_role_arn                          = aws_iam_role.role.arn
-  subnet1_id                             = aws_subnet.example1.id
-  subnet2_id                             = aws_subnet.example2.id
-  ec2_ssh_key                            = aws_key_pair.deployer.id
-  worker_node_policy                     = aws_iam_role_policy_attachment.eks-worker-node-policy
-  eks_cni_policy                         = aws_iam_role_policy_attachment.eks-cni-policy
-  eks_container_registry_readonly_policy = aws_iam_role_policy_attachment.eks-container-registry-readonly-policy
-  aws_internet_gateway                   = aws_internet_gateway.gw
+
+  depends_on = [ aws_eks_node_group.example_node ]
+}
+
+module "redis_db" {
+  source = "./modules/redis"
+  docker_image = "ghcr.io/jesusdalvarado/redis-jesus:latest"
+
+  depends_on = [ aws_eks_node_group.example_node ]
 }
