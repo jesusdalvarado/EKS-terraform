@@ -133,8 +133,16 @@ output "kubeconfig-certificate-authority-data" {
   value = aws_eks_cluster.eks_cluster_example.certificate_authority[0].data
 }
 
+resource "time_sleep" "wait_3_minutes" {
+  depends_on = [aws_eks_cluster.eks_cluster_example]
+
+  create_duration = "3m"
+}
+
 data "aws_eks_cluster_auth" "example" {
   name = "eks_cluster_example"
+
+  depends_on = [ time_sleep.wait_3_minutes ]
 }
 
 provider "kubernetes" {
