@@ -89,7 +89,6 @@ resource "aws_subnet" "example1" {
   map_public_ip_on_launch = true
 
   tags = {
-    # "kubernetes.io/cluster/${var.cluster_name}" = "shared"
     "kubernetes.io/cluster/eks_cluster_example" = "shared"
   }
 }
@@ -146,7 +145,7 @@ data "aws_eks_cluster_auth" "example" {
 }
 
 provider "kubernetes" {
-  load_config_file       = false # Do not use kubectl current's config context, use this cluster's config instead
+  load_config_file       = false # Do not use kubectl current config context, use this cluster's config instead
 
   host                   = aws_eks_cluster.eks_cluster_example.endpoint
   cluster_ca_certificate = base64decode(aws_eks_cluster.eks_cluster_example.certificate_authority[0].data)
